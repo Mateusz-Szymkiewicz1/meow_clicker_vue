@@ -15,18 +15,6 @@ body{
     font-family: font;
     background: var(--bg);
 }
-#cat_img{
-    display: block;
-    margin: auto;
-    margin-top: 11vh;
-    cursor: pointer;
-    transition: 0.1s;
-    box-shadow: -3px 1px 42px -5px rgba(0,0,0,0.75);
-    height: 20vw;
-    width: 20vw;
-    min-height: 200px;
-    min-width: 200px;
-}
 .score, .cps{
     display: block;
     font-size: 3em;
@@ -142,11 +130,6 @@ body{
     font-weight: 100;
     margin-top: -15px;
 }
-#clock_png, #fire_png{
-    margin-top: -5px;
-    margin-left: 30px;
-    margin-right: 20px;
-}
 .random_div{
     font-size: 40px;
     color: #fff;
@@ -197,54 +180,9 @@ body{
     cursor: pointer;
     transition: 0.4s;
 }
-.skiny{
-    overflow-x: hidden;
-}
 #button_tak:hover{
     background: #1dbb60;
 }
-.skin{
-    height: 100px;  
-    margin-bottom: 20px;
-}
-.skin > label{
-    font-size: 25px;
-    margin-left: 15px;
-    margin-top: 11px;
-}
-.skin>button{
-    width: 120px;
-}
-.skin_buff_label{
-    margin-top: -15px !important;
-    font-size: 14px !important;
-}
-.big_skin{
-    height: 120px !important;
-}
-@media only screen and (max-width: 466px) {
-    .skin{
-        height: 130px;
-    }
-    .big_skin{
-        height: 160px !important;
-    }
-    .big_skin .skin_set{
-        margin-top: -10px;
-    }
-    .skin_set{
-        margin-top: 10px;
-       margin-left: 13px !important;
-    }
-    .skin_buy{
-        margin-right: 20px;
-    }
-}
-@keyframes slideInRight{0%{-webkit-transform:translate3d(100%,0,0);transform:translate3d(100%,0,0);visibility:visible}to{-webkit-transform:translateZ(0);transform:translateZ(0)}}
-@keyframes slideOutRight{0%{-webkit-transform:translateZ(0);transform:translateZ(0)}to{-webkit-transform:translate3d(100%,0,0);transform:translate3d(100%,0,0);visibility:hidden}}
-@-webkit-keyframes slideInDown{0%{-webkit-transform:translate3d(0,-100%,0);transform:translate3d(0,-100%,0);visibility:visible}to{-webkit-transform:translateZ(0);transform:translateZ(0)}}
-@-webkit-keyframes slideOutUp{0%{-webkit-transform:translateZ(0);transform:translateZ(0)}to{-webkit-transform:translate3d(0,-100%,0);transform:translate3d(0,-100%,0);visibility:hidden}}
-@keyframes shake {10%, 90% {transform: translate3d(-1px, 0, 0);} 20%, 80% {transform: translate3d(2px, 0, 0);}30%, 50%, 70% {transform: translate3d(-4px, 0, 0);}40%, 60% {transform: translate3d(4px, 0, 0);}}
 .settings_icon{
     display: block !important;
     position: absolute;
@@ -255,61 +193,37 @@ body{
     z-index: 0;
     color: var(--color);
 }
-.settings > input[type=range]{
-    margin-left: 100px;
-    transform: scale(2);
-    cursor: pointer;
-    outline: none;
-    border: 0;
+.shake {
+  animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+  transform: translate3d(0, 0, 0);
 }
-.settings > label{
-    margin-left: 35px;
-    font-size: 25px;
+@keyframes shake {
+  10%, 90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+  20%, 80% {
+    transform: translate3d(2px, 0, 0);
+  }
+  30%, 50%, 70% {
+    transform: translate3d(-4px, 0, 0);
+  }
+  40%, 60% {
+    transform: translate3d(4px, 0, 0);
+  }
 }
-.toggle-switch {
-    position: relative;
-    width: 200px;
+.slideInDown{
+  animation: slideInDown .5s;
 }
-.toggle-switch label {
-    position: absolute;
-    width: 100%;
-    height: 100px;
-    background-color: var(--dark);
-    border-radius: 50px;
-    cursor: pointer;
+.slideOutUp{
+  animation: slideOutUp .5s;
 }
-.toggle-switch input{
-    position: absolute;
-    display: none;
+.slideInRight{
+  animation: slideInRight .5s;
 }
-.slider {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    border-radius: 50px;
-    transition: 0.3s;
+.slideOutRight{
+  animation: slideOutRight .5s;
 }
-.toggle-switch input:checked ~ .slider {
-    background-color: var(--light);
-}
-.slider::before {
-    content: "";
-    position: absolute;
-    top: 13px;
-    left: 16px;
-    width: 75px;
-    height: 75px;
-    border-radius: 50%;
-    box-shadow: inset 28px -4px 0px 0px var(--light);
-    background-color: var(--dark);
-    transition: 0.3s;
-}
-.toggle-switch input:checked ~ .slider::before {
-    transform: translateX(95px);
-    background-color: var(--dark);
-    box-shadow: none;
-}
-.toggle-switch {
-    transform: scale(0.5);
-    margin-left: -13px;
-}
+@keyframes slideInDown{0%{-webkit-transform:translate3d(0,-100%,0);transform:translate3d(0,-100%,0);visibility:visible}to{-webkit-transform:translateZ(0);transform:translateZ(0)}}
+@keyframes slideOutUp{0%{-webkit-transform:translateZ(0);transform:translateZ(0)}to{-webkit-transform:translate3d(0,-100%,0);transform:translate3d(0,-100%,0);visibility:hidden}}
+@keyframes slideInRight{0%{-webkit-transform:translate3d(100%,0,0);transform:translate3d(100%,0,0);visibility:visible}to{-webkit-transform:translateZ(0);transform:translateZ(0)}}
+@keyframes slideOutRight{0%{-webkit-transform:translateZ(0);transform:translateZ(0)}to{-webkit-transform:translate3d(100%,0,0);transform:translate3d(100%,0,0);visibility:hidden}}

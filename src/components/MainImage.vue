@@ -33,3 +33,17 @@ export default {
   }
 }
 </script>
+<style scoped>
+#cat_img{
+    display: block;
+    margin: auto;
+    margin-top: 11vh;
+    cursor: pointer;
+    transition: 0.1s;
+    box-shadow: -3px 1px 42px -5px rgba(0,0,0,0.75);
+    height: 20vw;
+    width: 20vw;
+    min-height: 200px;
+    min-width: 200px;
+}
+</style>

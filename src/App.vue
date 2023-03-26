@@ -3,18 +3,18 @@
   <MainImage :skin="current_skin" :strength="click_strength" :skin_buff_strength="skin_buff_strength" v-on:img_click="click_event" :current_skin="current_skin"></MainImage>
   <span class="score">MeowCount: {{score}}</span>
   <span class="cps">CPS: 0</span>
-  <button class="reset_btn" @click.left="show_decision = true">Reset</button>
+  <button class="reset_btn" @click.left="show_decision_method">Reset</button>
   <div class="decision" v-show="show_decision">
     <span>Na pewno?</span><br />
     <button id="button_tak" @click.left="reset">TAK</button>
-    <button id="button_nie" @click.left="show_decision = false">NIE</button>
+    <button id="button_nie" @click.left="hide_decision">NIE</button>
   </div>
-  <span class="x_icon" id="x_open" @click.left="show_shop = !show_shop">Sklep</span>
-  <span class="x_icon_skins" id="span_skins" @click.left="show_skins = !show_skins">Skiny</span>
-  <i class="fa fa-cog settings_icon" @click.left="show_settings = !show_settings"></i>
-  <ShopPanel @close-shop="show_shop = !show_shop" v-if="show_shop" :score="score" :strength="click_strength" :idle_clicks="idle_clicks"></ShopPanel>
-  <SkinsPanel v-if="show_skins" @close-skins="show_skins = !show_skins" :score="score"></SkinsPanel>
-  <SettingsPanel v-if="show_settings" @close-settings="show_settings = !show_settings" @change_volume="change_volume" :volume="volume" :theme="theme" @change_theme="change_theme"></SettingsPanel>
+  <span class="x_icon" id="x_open" @click.left="show_shop_method">Sklep</span>
+  <span class="x_icon_skins" id="span_skins" @click.left="show_skins_method">Skiny</span>
+  <i class="fa fa-cog settings_icon" @click.left="show_settings_method"></i>
+  <ShopPanel @close-shop="close_shop" v-show="show_shop" :score="score" :strength="click_strength" :idle_clicks="idle_clicks" @buy-strength="buy_strength"></ShopPanel>
+  <SkinsPanel v-show="show_skins" @close-skins="close_skins" :score="score"></SkinsPanel>
+  <SettingsPanel v-show="show_settings" @close-settings="close_settings" @change_volume="change_volume" :volume="volume" :theme="theme" @change_theme="change_theme"></SettingsPanel>
 </template>
 
 <script>
@@ -141,6 +141,66 @@ export default {
         this.light_theme()
       }
       this.save_settings()
+    },
+    show_decision_method () {
+      this.show_decision = true
+      document.querySelector('.decision').classList.add('slideInDown')
+    },
+    hide_decision () {
+      document.querySelector('.decision').classList.remove('slideInDown')
+      document.querySelector('.decision').classList.add('slideOutUp')
+      setTimeout(() => {
+        this.show_decision = false
+        document.querySelector('.decision').classList.remove('slideOutUp')
+      }, 450)
+    },
+    show_shop_method () {
+      this.show_shop = true
+      document.querySelector('.shop').classList.add('slideInRight')
+    },
+    close_shop () {
+      document.querySelector('.shop').classList.remove('slideInRight')
+      document.querySelector('.shop').classList.add('slideOutRight')
+      setTimeout(() => {
+        this.show_shop = false
+        document.querySelector('.shop').classList.remove('slideOutRight')
+      }, 450)
+    },
+    show_skins_method () {
+      this.show_skins = true
+      document.querySelector('.skiny').classList.add('slideInRight')
+    },
+    close_skins () {
+      document.querySelector('.skiny').classList.remove('slideInRight')
+      document.querySelector('.skiny').classList.add('slideOutRight')
+      setTimeout(() => {
+        this.show_skins = false
+        document.querySelector('.skiny').classList.remove('slideOutRight')
+      }, 450)
+    },
+    show_settings_method () {
+      this.show_settings = true
+      document.querySelector('.settings').classList.add('slideInRight')
+    },
+    close_settings () {
+      document.querySelector('.settings').classList.remove('slideInRight')
+      document.querySelector('.settings').classList.add('slideOutRight')
+      setTimeout(() => {
+        this.show_settings = false
+        document.querySelector('.settings').classList.remove('slideOutRight')
+      }, 450)
+    },
+    buy_strength (price, target) {
+      if (this.score >= price) {
+        this.score -= price
+        this.click_strength++
+        this.save_score()
+      } else {
+        target.classList.add('shake')
+        setTimeout(function () {
+          target.classList.remove('shake')
+        }, 1000)
+      }
     }
   },
   mounted () {

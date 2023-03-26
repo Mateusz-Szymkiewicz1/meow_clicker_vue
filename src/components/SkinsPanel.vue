@@ -35,3 +35,45 @@ export default {
   props: ['score']
 }
 </script>
+<style scoped>
+.skiny{
+    overflow-x: hidden;
+}
+.skin{
+    height: 100px;
+    margin-bottom: 20px;
+}
+.skin > label{
+    font-size: 25px;
+    margin-left: 15px;
+    margin-top: 11px;
+}
+.skin>button{
+    width: 120px;
+}
+.skin_buff_label{
+    margin-top: -15px !important;
+    font-size: 14px !important;
+}
+.big_skin{
+    height: 120px !important;
+}
+@media only screen and (max-width: 466px) {
+    .skin{
+        height: 130px;
+    }
+    .big_skin{
+        height: 160px !important;
+    }
+    .big_skin .skin_set{
+        margin-top: -10px;
+    }
+    .skin_set{
+        margin-top: 10px;
+       margin-left: 13px !important;
+    }
+    .skin_buy{
+        margin-right: 20px;
+    }
+}
+</style>
