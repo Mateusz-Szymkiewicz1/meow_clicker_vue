@@ -1,0 +1,315 @@
+:root {
+  --light: #d8dbe0;
+  --dark: #28292c;
+  --color: #000;
+  --bg: #fff;
+  --button-bg: #202020;
+}
+@font-face {
+    font-family: font;
+    src: url(@/font.ttf) format("truetype");
+}
+body{
+    overflow-x: hidden;
+    user-select: none;
+    font-family: font;
+    background: var(--bg);
+}
+#cat_img{
+    display: block;
+    margin: auto;
+    margin-top: 11vh;
+    cursor: pointer;
+    transition: 0.1s;
+    box-shadow: -3px 1px 42px -5px rgba(0,0,0,0.75);
+    height: 20vw;
+    width: 20vw;
+    min-height: 200px;
+    min-width: 200px;
+}
+.score, .cps{
+    display: block;
+    font-size: 3em;
+    width: 100%;
+    text-align: center;
+    margin-top: 30px;
+    text-shadow: -2px 1px 2px rgba(0,0,0,0.6);
+    color: var(--color);
+}
+.reset_btn{
+    display: block;
+    margin: auto;
+    height: 40px;
+    width: 130px;
+    margin-top: 30px;
+    cursor: pointer;
+    font-family: font;
+    font-size: 18px;
+    background-color: var(--button-bg);
+    color: #fff;
+    border: 0;
+    outline: none;
+    transition: 0.4s;
+}
+.reset_btn:hover{
+    border: 1px solid var(--color);
+    background-color: var(--bg);
+    color: var(--button-bg);
+}
+.cps{
+    margin-top: 0px;
+}
+.shop, .skiny, .settings{
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 500px;
+    max-width: 100%;
+    height: 100%;
+    background: #ffbe76;
+    color: #fff;
+    overflow-y: auto;
+    overflow-x: hidden;
+    z-index: 100;
+}
+.shop > h2, .skiny > h2, .settings > h2{
+    text-align: center;
+    font-size: 32px;
+    margin-top: 10px;
+}
+.x_icon, .x_icon_skins{
+    display: block;
+    position: absolute;
+    top: 0px;
+    right: 10px;
+    cursor: pointer;
+    font-size: 3em;
+}
+#span_skins{
+    top: 60px;
+    text-decoration: underline;
+    color: var(--color);
+}
+#x_open{
+    color: var(--color);
+    text-decoration: underline;
+}
+.shop_item, .skin{
+    background: #eead65;
+    width: 90%;
+    margin: auto;
+    height: 65px;
+    padding-top: 35px;
+    cursor: pointer;
+    transition: 0.4s;
+}
+.shop_item, .skin:hover{
+    background: #dd9c54;
+}
+.shop_item > label, .skin > label{
+    font-size: 18px;
+    float: left;
+    pointer-events: none;
+    letter-spacing: -2px;
+}
+.shop_item > button, .skin>button{
+    outline: none;
+    border: 0;
+    background: #fff;
+    color: #000;
+    height: 25px;
+    cursor: pointer;
+    width: 140px;
+    font-family: 'font';
+    margin-left: 20px;
+    float: left;
+    transition: 0.4s;
+}
+.shop_item > button:hover, .skin>button:hover{
+    background: #000;
+    color: #fff;
+}
+.shop_img, .skin > img{
+    float: left;
+    margin-top: -15px;
+    margin-right: 10px;
+    margin-left: 15px;
+}
+.shop > h3, .skiny > h3{
+    font-size: 25px;
+    width: 100%;
+    text-align: center;
+    font-weight: 100;
+    margin-top: -15px;
+}
+#clock_png, #fire_png{
+    margin-top: -5px;
+    margin-left: 30px;
+    margin-right: 20px;
+}
+.random_div{
+    font-size: 40px;
+    color: #fff;
+    text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000 ;
+    pointer-events: none;
+}
+.decision{
+    margin: auto;
+    position: absolute;
+    width: 400px;
+    height: 120px;
+    top: 30px;
+    left: 0;
+    right: 0;
+    max-width: 90%;
+    background: #ffbe76;
+    color: #fff;
+    font-size: 28px;
+    text-align: center;
+    padding-top: 30px;
+}
+#button_nie{
+    background: #e74c3c;
+    border: 0;
+    outline: none;
+    height: 35px;
+    width: 100px;
+    color: #fff;
+    font-family: 'font';
+    margin-left: 10px;
+    margin-top: 20px;
+    cursor: pointer;
+    transition: 0.4s;
+}
+#button_nie:hover{
+    background: #d63b2b;
+}
+#button_tak{
+    background: #2ecc71;
+    border: 0;
+    outline: none;
+    height: 35px;
+    width: 100px;
+    color: #fff;
+    font-family: 'font';
+    margin-right: 10px;
+    margin-top: 20px;
+    cursor: pointer;
+    transition: 0.4s;
+}
+.skiny{
+    overflow-x: hidden;
+}
+#button_tak:hover{
+    background: #1dbb60;
+}
+.skin{
+    height: 100px;  
+    margin-bottom: 20px;
+}
+.skin > label{
+    font-size: 25px;
+    margin-left: 15px;
+    margin-top: 11px;
+}
+.skin>button{
+    width: 120px;
+}
+.skin_buff_label{
+    margin-top: -15px !important;
+    font-size: 14px !important;
+}
+.big_skin{
+    height: 120px !important;
+}
+@media only screen and (max-width: 466px) {
+    .skin{
+        height: 130px;
+    }
+    .big_skin{
+        height: 160px !important;
+    }
+    .big_skin .skin_set{
+        margin-top: -10px;
+    }
+    .skin_set{
+        margin-top: 10px;
+       margin-left: 13px !important;
+    }
+    .skin_buy{
+        margin-right: 20px;
+    }
+}
+@keyframes slideInRight{0%{-webkit-transform:translate3d(100%,0,0);transform:translate3d(100%,0,0);visibility:visible}to{-webkit-transform:translateZ(0);transform:translateZ(0)}}
+@keyframes slideOutRight{0%{-webkit-transform:translateZ(0);transform:translateZ(0)}to{-webkit-transform:translate3d(100%,0,0);transform:translate3d(100%,0,0);visibility:hidden}}
+@-webkit-keyframes slideInDown{0%{-webkit-transform:translate3d(0,-100%,0);transform:translate3d(0,-100%,0);visibility:visible}to{-webkit-transform:translateZ(0);transform:translateZ(0)}}
+@-webkit-keyframes slideOutUp{0%{-webkit-transform:translateZ(0);transform:translateZ(0)}to{-webkit-transform:translate3d(0,-100%,0);transform:translate3d(0,-100%,0);visibility:hidden}}
+@keyframes shake {10%, 90% {transform: translate3d(-1px, 0, 0);} 20%, 80% {transform: translate3d(2px, 0, 0);}30%, 50%, 70% {transform: translate3d(-4px, 0, 0);}40%, 60% {transform: translate3d(4px, 0, 0);}}
+.settings_icon{
+    display: block !important;
+    position: absolute;
+    top: 130px;
+    right: 10px;
+    cursor: pointer;
+    font-size: 3em !important;
+    z-index: 0;
+    color: var(--color);
+}
+.settings > input[type=range]{
+    margin-left: 100px;
+    transform: scale(2);
+    cursor: pointer;
+    outline: none;
+    border: 0;
+}
+.settings > label{
+    margin-left: 35px;
+    font-size: 25px;
+}
+.toggle-switch {
+    position: relative;
+    width: 200px;
+}
+.toggle-switch label {
+    position: absolute;
+    width: 100%;
+    height: 100px;
+    background-color: var(--dark);
+    border-radius: 50px;
+    cursor: pointer;
+}
+.toggle-switch input{
+    position: absolute;
+    display: none;
+}
+.slider {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50px;
+    transition: 0.3s;
+}
+.toggle-switch input:checked ~ .slider {
+    background-color: var(--light);
+}
+.slider::before {
+    content: "";
+    position: absolute;
+    top: 13px;
+    left: 16px;
+    width: 75px;
+    height: 75px;
+    border-radius: 50%;
+    box-shadow: inset 28px -4px 0px 0px var(--light);
+    background-color: var(--dark);
+    transition: 0.3s;
+}
+.toggle-switch input:checked ~ .slider::before {
+    transform: translateX(95px);
+    background-color: var(--dark);
+    box-shadow: none;
+}
+.toggle-switch {
+    transform: scale(0.5);
+    margin-left: -13px;
+}
