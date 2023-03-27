@@ -5,9 +5,7 @@
 <script>
 export default {
   data: function () {
-    return {
-      name: 'MainImage'
-    }
+    return { name: 'MainImage' }
   },
   props: ['skin', 'strength', 'skin_buff_strength', 'current_skin'],
   methods: {
@@ -21,15 +19,24 @@ export default {
         div.remove()
       }, 500)
     },
-    clickHandle (e) {
+    clickHandle (e = null) {
       if (document.querySelector('#cat_img').style.transform === 'scale(1)') {
         document.querySelector('#cat_img').style.transform = 'scale(1.1)'
       } else {
         document.querySelector('#cat_img').style.transform = 'scale(1)'
       }
-      this.click_effect(e)
+      if (e) {
+        this.click_effect(e)
+      }
       this.$emit('img_click')
     }
+  },
+  mounted () {
+    document.addEventListener('keyup', (e) => {
+      if (e.keyCode === 32) {
+        this.clickHandle()
+      }
+    })
   }
 }
 </script>

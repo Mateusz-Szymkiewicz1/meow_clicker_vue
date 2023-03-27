@@ -16,9 +16,7 @@
 <script>
 export default {
   data: function () {
-    return {
-      name: 'SettingsPanel'
-    }
+    return { name: 'SettingsPanel' }
   },
   props: ['volume', 'theme'],
   mounted () {

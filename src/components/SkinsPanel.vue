@@ -3,15 +3,10 @@
        <span class="x_icon_skins" id="x_close" @click.left="$emit('closeSkins')">x</span>
         <h2>Skiny</h2>
     <h3>{{score}}C</h3>
-    <div class="skin" data-name="robert" data-state="1">
-        <img src="@/images/robert.jpg" width="100px" height="100px">
-        <label class="skin_label">Robert</label><br /><br /><br />
-        <button class="skin_buy" style="pointer-events: none;background: #aaa;">Kup</button><button class="skin_set">Ustaw</button>
-    </div>
-    <div v-for="(skin,i) in skins" :key="i" class="skin" :data-name="skin.name" data-state="0">
+    <div v-for="(skin,i) in skins" :key="i" class="skin" :id="skin.name.toLowerCase()">
         <img :src="require('@/images/'+skin.name.toLowerCase()+'.jpg')" style="width:100px;height:100px;">
         <label class="skin_label">{{skin.name}}</label><br /><br /><br />
-        <button class="skin_buy" data-price="400">Kup ({{skin.price}})</button><button class="skin_set">Ustaw</button>
+        <button class="skin_buy" @click="skins_check" @click.left="$emit('buySkin',skin.name,skin.price,$event.target)">Kup <span v-if="skin.price">(</span>{{skin.price}}<span v-if="skin.price">)</span></button><button class="skin_set" @click="skins_check" @click.left="$emit('setSkin',skin.name)">Ustaw</button>
     </div>
     </div>
 </template>
@@ -21,6 +16,7 @@ export default {
     return {
       name: 'SkinsPanel',
       skins: [
+        { name: 'Robert', price: '' },
         { name: 'Herbert', price: 400 },
         { name: 'Ildefons', price: 600 },
         { name: 'Laurenty', price: 800 },
@@ -32,7 +28,36 @@ export default {
       ]
     }
   },
-  props: ['score']
+  props: ['score', 'skins_array', 'current_skin'],
+  methods: {
+    skins_check () {
+      this.skins.forEach(skin => {
+        document.querySelector('#' + skin.name.toLowerCase() + ' .skin_set').style = 'background: #aaa;pointer-events:none;'
+        this.skins_array.forEach(ownedSkin => {
+          if (skin.name.toLowerCase() === ownedSkin) {
+            document.querySelector('#' + skin.name.toLowerCase() + ' .skin_buy').style = 'background: #aaa;pointer-events:none;'
+            if (skin.name.toLowerCase() !== this.current_skin) {
+              document.querySelector('#' + skin.name.toLowerCase() + ' .skin_set').style = ''
+            }
+          }
+        })
+      })
+    }
+  },
+  mounted () {
+    this.skins_check()
+  },
+  watch: {
+    skins_array: {
+      handler: function () {
+        this.skins_check()
+      },
+      deep: true
+    },
+    current_skin: function () {
+      this.skins_check()
+    }
+  }
 }
 </script>
 <style scoped>

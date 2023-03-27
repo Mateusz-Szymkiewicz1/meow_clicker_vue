@@ -9,12 +9,12 @@
     <button id="button_tak" @click.left="reset">TAK</button>
     <button id="button_nie" @click.left="hide_decision">NIE</button>
   </div>
-  <span class="x_icon" id="x_open" @click.left="show_shop_method">Sklep</span>
-  <span class="x_icon_skins" id="span_skins" @click.left="show_skins_method">Skiny</span>
-  <i class="fa fa-cog settings_icon" @click.left="show_settings_method"></i>
-  <ShopPanel @close-shop="close_shop" v-show="show_shop" :score="score" :strength="click_strength" :idle_clicks="idle_clicks" @buy-strength="buy_strength"></ShopPanel>
-  <SkinsPanel v-show="show_skins" @close-skins="close_skins" :score="score"></SkinsPanel>
-  <SettingsPanel v-show="show_settings" @close-settings="close_settings" @change_volume="change_volume" :volume="volume" :theme="theme" @change_theme="change_theme"></SettingsPanel>
+  <span class="x_icon" id="x_open" @click.left="show_panel('shop')">Sklep</span>
+  <span class="x_icon_skins" id="span_skins" @click.left="show_panel('skiny')">Skiny</span>
+  <i class="fa fa-cog settings_icon" @click.left="show_panel('settings')"></i>
+  <ShopPanel @close-shop="close_panel('shop')" v-show="show_shop" :score="score" :strength="click_strength" :idle_clicks="idle_clicks" @buy="buy"></ShopPanel>
+  <SkinsPanel v-show="show_skiny" @close-skins="close_panel('skiny')" @buy-skin="buy_skin" @set-skin="set_skin" :score="score" :skins_array="skins" :current_skin="current_skin"></SkinsPanel>
+  <SettingsPanel v-show="show_settings" @close-settings="close_panel('settings')" @change_volume="change_volume" :volume="volume" :theme="theme" @change_theme="change_theme"></SettingsPanel>
 </template>
 
 <script>
@@ -64,7 +64,7 @@ export default {
       current_skin: currentSkin,
       show_decision: false,
       show_shop: false,
-      show_skins: false,
+      show_skiny: false,
       show_settings: false,
       audios: ['meow.mp3', 'sound1.wav', 'sound2.wav', 'sound3.wav', 'sound4.wav', 'sound5.wav', 'sound6.wav', 'sound7.wav', 'sound8.wav', 'sound9.wav']
     }
@@ -80,9 +80,11 @@ export default {
       this.cps++
       this.score = parseInt(this.score + this.click_strength + this.skin_buff_strength)
       this.save_score()
-      const audio = document.querySelector('audio').cloneNode()
-      audio.volume = 0.4 * this.volume
-      audio.play()
+      if (this.volume > 0) {
+        const audio = document.querySelector('audio').cloneNode()
+        audio.volume = 0.4 * this.volume
+        audio.play()
+      }
     },
     reset () {
       localStorage.removeItem('meow_save')
@@ -154,46 +156,22 @@ export default {
         document.querySelector('.decision').classList.remove('slideOutUp')
       }, 450)
     },
-    show_shop_method () {
-      this.show_shop = true
-      document.querySelector('.shop').classList.add('slideInRight')
+    show_panel (panel) {
+      this['show_' + panel] = true
+      document.querySelector('.' + panel).classList.add('slideInRight')
     },
-    close_shop () {
-      document.querySelector('.shop').classList.remove('slideInRight')
-      document.querySelector('.shop').classList.add('slideOutRight')
+    close_panel (panel) {
+      document.querySelector('.' + panel).classList.remove('slideInRight')
+      document.querySelector('.' + panel).classList.add('slideOutRight')
       setTimeout(() => {
-        this.show_shop = false
-        document.querySelector('.shop').classList.remove('slideOutRight')
+        this['show_' + panel] = false
+        document.querySelector('.' + panel).classList.remove('slideOutRight')
       }, 450)
     },
-    show_skins_method () {
-      this.show_skins = true
-      document.querySelector('.skiny').classList.add('slideInRight')
-    },
-    close_skins () {
-      document.querySelector('.skiny').classList.remove('slideInRight')
-      document.querySelector('.skiny').classList.add('slideOutRight')
-      setTimeout(() => {
-        this.show_skins = false
-        document.querySelector('.skiny').classList.remove('slideOutRight')
-      }, 450)
-    },
-    show_settings_method () {
-      this.show_settings = true
-      document.querySelector('.settings').classList.add('slideInRight')
-    },
-    close_settings () {
-      document.querySelector('.settings').classList.remove('slideInRight')
-      document.querySelector('.settings').classList.add('slideOutRight')
-      setTimeout(() => {
-        this.show_settings = false
-        document.querySelector('.settings').classList.remove('slideOutRight')
-      }, 450)
-    },
-    buy_strength (price, target) {
+    buy (type, price, target) {
       if (this.score >= price) {
         this.score -= price
-        this.click_strength++
+        this[type]++
         this.save_score()
       } else {
         target.classList.add('shake')
@@ -201,11 +179,27 @@ export default {
           target.classList.remove('shake')
         }, 1000)
       }
+    },
+    buy_skin (name, price, target) {
+      if (this.score >= price) {
+        this.score -= price
+        this.skins.push(name.toLowerCase())
+        this.save_score()
+      } else {
+        target.classList.add('shake')
+        setTimeout(function () {
+          target.classList.remove('shake')
+        }, 1000)
+      }
+    },
+    set_skin (name) {
+      this.current_skin = name.toLowerCase()
+      this.save_score()
     }
   },
   mounted () {
     setInterval(() => {
-      if (this.cps > 5) {
+      if (this.cps > 5 && this.volume > 0) {
         const rand = Math.floor(this.randomNumber(2, 10))
         const audio = document.querySelector(`audio:nth-of-type(${rand})`).cloneNode()
         audio.volume = this.volume
@@ -216,6 +210,19 @@ export default {
     }, 1000)
     if (this.theme === 'dark') {
       this.dark_theme()
+    }
+    if (this.idle_clicks !== 0) {
+      this.idleInterval = setInterval(() => {
+        this.score++
+      }, (1000 / this.idle_clicks))
+    }
+  },
+  watch: {
+    idle_clicks: function (value) {
+      clearInterval(this.idleInterval)
+      this.idleInterval = setInterval(() => {
+        this.score++
+      }, (1000 / this.idle_clicks))
     }
   }
 }
