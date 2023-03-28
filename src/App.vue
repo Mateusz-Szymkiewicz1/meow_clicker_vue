@@ -1,6 +1,6 @@
 <template>
   <audio v-for="(url,i) in audios" :key="i" :src="require('@/audio/'+url)"></audio>
-  <MainImage :skin="current_skin" :strength="click_strength" :skin_buff_strength="skin_buff_strength" v-on:img_click="click_event" :current_skin="current_skin"></MainImage>
+  <MainImage :skin="current_skin" :strength="click_strength" @img_click="click_event" :current_skin="current_skin" :skin_buff_strength="skin_buff_strength"></MainImage>
   <span class="score">MeowCount: {{score}}</span>
   <span class="cps">CPS: 0</span>
   <button class="reset_btn" @click.left="show_decision_method">Reset</button>
@@ -27,10 +27,11 @@ let idleClicks = 0
 let clickStrength = 1
 let skins = ['robert']
 let currentSkin = 'robert'
-let skinBuffStrength = 0
-let hasSkinBuffAutoClick = 0
 let theme = 'light'
 let volume = 0.5
+let skinBuff = ''
+let skinBuffPower = 0
+let skinBuffStrength = 0
 if (localStorage.getItem('meow_save')) {
   const json = JSON.parse(localStorage.getItem('meow_save'))
   score = parseInt(json.score)
@@ -38,8 +39,9 @@ if (localStorage.getItem('meow_save')) {
   idleClicks = parseInt(json.idle_clicks)
   skins = json.skins
   currentSkin = json.current_skin
+  skinBuff = json.skin_buff
+  skinBuffPower = parseInt(json.skin_buff_power)
   skinBuffStrength = parseInt(json.skin_buff_strength)
-  hasSkinBuffAutoClick = parseInt(json.has_skin_buff_auto_click)
 }
 if (localStorage.getItem('meow_settings')) {
   const json = JSON.parse(localStorage.getItem('meow_settings'))
@@ -56,11 +58,10 @@ export default {
       click_strength: clickStrength,
       idle_clicks: idleClicks,
       skins: skins,
-      strength_buff_active: false,
-      current_skin_buff: '',
-      current_skin_buff_amount: 0,
+      skin_buff: skinBuff,
+      skin_buff_power: skinBuffPower,
       skin_buff_strength: skinBuffStrength,
-      has_skin_buff_auto_click: hasSkinBuffAutoClick,
+      strength_buff_active: false,
       current_skin: currentSkin,
       show_decision: false,
       show_shop: false,
@@ -92,10 +93,8 @@ export default {
     },
     save_score () {
       let strength = this.click_strength
-      let skinBuffStrength = this.skin_buff_strength
       if (this.strength_buff_active) {
         strength = strength / 2
-        skinBuffStrength = skinBuffStrength / 2
       }
       window.localStorage.setItem('meow_save', JSON.stringify({
         score: this.score,
@@ -103,8 +102,9 @@ export default {
         idle_clicks: this.idle_clicks,
         skins: this.skins,
         current_skin: this.current_skin,
-        skin_buff_strength: skinBuffStrength,
-        has_skin_buff_auto_click: this.has_skin_buff_auto_click
+        skin_buff: this.skin_buff,
+        skin_buff_power: this.skin_buff_power,
+        skin_buff_strength: this.skin_buff_strength
       }))
     },
     save_settings () {
@@ -180,10 +180,10 @@ export default {
         }, 1000)
       }
     },
-    buy_skin (name, price, target) {
-      if (this.score >= price) {
-        this.score -= price
-        this.skins.push(name.toLowerCase())
+    buy_skin (skin, target) {
+      if (this.score >= skin.price) {
+        this.score -= skin.price
+        this.skins.push(skin.name.toLowerCase())
         this.save_score()
       } else {
         target.classList.add('shake')
@@ -192,8 +192,14 @@ export default {
         }, 1000)
       }
     },
-    set_skin (name) {
-      this.current_skin = name.toLowerCase()
+    set_skin (skin) {
+      this.current_skin = skin.name.toLowerCase()
+      this.skin_buff = ''
+      this.skin_buff_power = 0
+      if (skin.buff) {
+        this.skin_buff = skin.buff
+        this.skin_buff_power = skin.power
+      }
       this.save_score()
     },
     buy_buff (item, target) {
@@ -233,16 +239,47 @@ export default {
     if (this.idle_clicks !== 0) {
       this.idleInterval = setInterval(() => {
         this.score++
+        this.save_score()
       }, (1000 / this.idle_clicks))
+    }
+    if (this.skin_buff === 'Idle Clicks') {
+      if (this.skin_buff_interval) {
+        clearInterval(this.skin_buff_interval)
+      }
+      this.skin_buff_interval = setInterval(() => {
+        this.score++
+        this.save_score()
+      }, 1000 / this.skin_buff_power)
     }
     window.app = this
   },
   watch: {
-    idle_clicks: function (value) {
+    idle_clicks: function () {
       clearInterval(this.idleInterval)
       this.idleInterval = setInterval(() => {
         this.score++
       }, (1000 / this.idle_clicks))
+    },
+    skin_buff: function () {
+      if (this.skin_buff === '') {
+        if (this.skin_buff_interval) {
+          clearInterval(this.skin_buff_interval)
+        }
+        this.skin_buff_strength = 0
+      }
+      if (this.skin_buff === 'Idle Clicks') {
+        this.skin_buff_strength = 0
+        if (this.skin_buff_interval) {
+          clearInterval(this.skin_buff_interval)
+        }
+        this.skin_buff_interval = setInterval(() => {
+          this.score++
+          this.save_score()
+        }, 1000 / this.skin_buff_power)
+      }
+      if (this.skin_buff === 'Strength') {
+        this.skin_buff_strength = this.skin_buff_power
+      }
     }
   }
 }

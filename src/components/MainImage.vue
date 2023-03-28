@@ -7,7 +7,7 @@ export default {
   data: function () {
     return { name: 'MainImage' }
   },
-  props: ['skin', 'strength', 'skin_buff_strength', 'current_skin'],
+  props: ['skin', 'strength', 'current_skin', 'skin_buff_strength'],
   methods: {
     click_effect (e) {
       const div = document.createElement('div')

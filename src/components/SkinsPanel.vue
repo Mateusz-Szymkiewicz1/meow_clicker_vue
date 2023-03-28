@@ -3,10 +3,11 @@
        <span class="x_icon_skins" id="x_close" @click.left="$emit('closeSkins')">x</span>
         <h2>Skiny</h2>
     <h3>{{score}}C</h3>
-    <div v-for="(skin,i) in skins" :key="i" class="skin" :id="skin.name.toLowerCase()">
+    <div v-for="(skin,i) in skins" :key="i" :class="'skin '+skin.class" :id="skin.name.toLowerCase()">
         <img :src="require('@/images/'+skin.name.toLowerCase()+'.jpg')" style="width:100px;height:100px;">
         <label class="skin_label">{{skin.name}}</label><br /><br /><br />
-        <button class="skin_buy" @click="skins_check" @click.left="$emit('buySkin',skin.name,skin.price,$event.target)">Kup <span v-if="skin.price">(</span>{{skin.price}}<span v-if="skin.price">)</span></button><button class="skin_set" @click="skins_check" @click.left="$emit('setSkin',skin.name)">Ustaw</button>
+        <label class="skin_buff_label" v-if="skin.buff">+{{skin.power}} {{skin.buff}}</label><br v-if="skin.buff">
+        <button class="skin_buy" @click="skins_check" @click.left="$emit('buySkin',skin,$event.target)">Kup <span v-if="skin.price">(</span>{{skin.price}}<span v-if="skin.price">)</span></button><button class="skin_set" @click="skins_check" @click.left="$emit('setSkin',skin)">Ustaw</button>
     </div>
     </div>
 </template>
@@ -21,10 +22,10 @@ export default {
         { name: 'Ildefons', price: 600 },
         { name: 'Laurenty', price: 800 },
         { name: 'Konstanty', price: 1000 },
-        { name: 'Gerwazy', price: 1200 },
-        { name: 'Greg', price: 1500 },
-        { name: 'Kamien', price: 2000 },
-        { name: 'Karol', price: 2138 }
+        { name: 'Gerwazy', price: 1200, buff: 'Idle Clicks', power: 1, class: 'big_skin' },
+        { name: 'Greg', price: 1500, buff: 'Strength', power: 4, class: 'big_skin' },
+        { name: 'Kamien', price: 2000, buff: 'Idle Clicks', power: 2, class: 'big_skin' },
+        { name: 'Karol', price: 2138, buff: 'Strength', power: 4, class: 'big_skin' }
       ]
     }
   },
