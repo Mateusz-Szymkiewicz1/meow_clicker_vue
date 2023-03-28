@@ -16,3 +16,7 @@ function responsivity (x) {
 var x = window.matchMedia('(max-width: 630px)')
 responsivity(x)
 x.addListener(responsivity)
+
+window.cheat = function (score) {
+  window.app.score = score
+}

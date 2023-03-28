@@ -12,7 +12,7 @@
   <span class="x_icon" id="x_open" @click.left="show_panel('shop')">Sklep</span>
   <span class="x_icon_skins" id="span_skins" @click.left="show_panel('skiny')">Skiny</span>
   <i class="fa fa-cog settings_icon" @click.left="show_panel('settings')"></i>
-  <ShopPanel @close-shop="close_panel('shop')" v-show="show_shop" :score="score" :strength="click_strength" :idle_clicks="idle_clicks" @buy="buy"></ShopPanel>
+  <ShopPanel ref="shop" @close-shop="close_panel('shop')" v-show="show_shop" @buy-buff="buy_buff" :score="score" :strength="click_strength" :idle_clicks="idle_clicks" @buy="buy"></ShopPanel>
   <SkinsPanel v-show="show_skiny" @close-skins="close_panel('skiny')" @buy-skin="buy_skin" @set-skin="set_skin" :score="score" :skins_array="skins" :current_skin="current_skin"></SkinsPanel>
   <SettingsPanel v-show="show_settings" @close-settings="close_panel('settings')" @change_volume="change_volume" :volume="volume" :theme="theme" @change_theme="change_theme"></SettingsPanel>
 </template>
@@ -168,10 +168,10 @@ export default {
         document.querySelector('.' + panel).classList.remove('slideOutRight')
       }, 450)
     },
-    buy (type, price, target) {
-      if (this.score >= price) {
-        this.score -= price
-        this[type]++
+    buy (item, target) {
+      if (this.score >= item.price) {
+        this.score -= item.price
+        this[item.type]++
         this.save_score()
       } else {
         target.classList.add('shake')
@@ -195,6 +195,25 @@ export default {
     set_skin (name) {
       this.current_skin = name.toLowerCase()
       this.save_score()
+    },
+    buy_buff (item, target) {
+      if (this.score >= item.price) {
+        this.score -= item.price
+        this.$refs.shop.buy_buff(item.duration, target)
+        if (item.type === 'strength') {
+          this.strength_buff_active = true
+          this.click_strength = this.click_strength * 2
+          setTimeout(() => {
+            this.strength_buff_active = false
+            this.click_strength = this.click_strength / 2
+          }, 1000 * item.duration)
+        }
+      } else {
+        target.classList.add('shake')
+        setTimeout(function () {
+          target.classList.remove('shake')
+        }, 1000)
+      }
     }
   },
   mounted () {
@@ -216,6 +235,7 @@ export default {
         this.score++
       }, (1000 / this.idle_clicks))
     }
+    window.app = this
   },
   watch: {
     idle_clicks: function (value) {
